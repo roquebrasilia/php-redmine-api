@@ -2,7 +2,7 @@
 
 namespace Redmine\Tests;
 
-use Redmine\TestClient;
+use Redmine\Fixtures\MockClient as TestClient;
 
 class UserXmlTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +14,7 @@ class UserXmlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-      * @expectedException Exception
+     * @expectedException Exception
      */
     public function testCreateBlank()
     {
@@ -23,16 +23,16 @@ class UserXmlTest extends \PHPUnit_Framework_TestCase
         $xml = '<?xml version="1.0"?>
 <user/>';
         $res = $this->client->api('user')->create();
-        $this->assertEquals($this->formatXml($xml), $this->formatXml($res));
+        $this->assertEquals($this->formatXml($xml), $this->formatXml($res['data']));
     }
 
     public function testCreateComplex()
     {
         $res = $this->client->api('user')->create(array(
-            'login'     => 'test',
+            'login' => 'test',
             'firstname' => 'test',
-            'lastname'  => 'test',
-            'mail'      => 'test@example.com',
+            'lastname' => 'test',
+            'mail' => 'test@example.com',
         ));
 
         $xml = '<?xml version="1.0"?>
@@ -42,13 +42,13 @@ class UserXmlTest extends \PHPUnit_Framework_TestCase
     <firstname>test</firstname>
     <mail>test@example.com</mail>
 </user>';
-        $this->assertEquals($this->formatXml($xml), $this->formatXml($res));
+        $this->assertEquals($this->formatXml($xml), $this->formatXml($res['data']));
     }
 
     public function testUpdate()
     {
         $res = $this->client->api('user')->update(1, array(
-            'firstname' => 'Raul'
+            'firstname' => 'Raul',
         ));
 
         $xml = '<?xml version="1.0"?>
@@ -56,7 +56,7 @@ class UserXmlTest extends \PHPUnit_Framework_TestCase
     <id>1</id>
     <firstname>Raul</firstname>
 </user>';
-        $this->assertEquals($this->formatXml($xml), $this->formatXml($res));
+        $this->assertEquals($this->formatXml($xml), $this->formatXml($res['data']));
     }
 
     private function formatXml($xml)

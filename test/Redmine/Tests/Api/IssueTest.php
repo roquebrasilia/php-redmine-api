@@ -6,16 +6,15 @@ use Redmine\Api\Issue;
 
 /**
  * @coversDefaultClass Redmine\Api\Issue
+ *
  * @author     Malte Gerth <mail@malte-gerth.de>
  */
 class IssueTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test the constants
+     * Test the constants.
      *
      * @test
-     *
-     * @return void
      */
     public function testPriorityConstants()
     {
@@ -27,12 +26,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponse()
     {
@@ -58,12 +55,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithParameters()
     {
@@ -93,13 +88,11 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test show()
+     * Test show().
      *
      * @covers ::get
      * @covers ::show
      * @test
-     *
-     * @return void
      */
     public function testShowReturnsClientGetResponse()
     {
@@ -123,13 +116,11 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test show()
+     * Test show().
      *
      * @covers ::get
      * @covers ::show
      * @test
-     *
-     * @return void
      */
     public function testShowCallsGetUrlWithParameters()
     {
@@ -159,13 +150,44 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test remove()
+     * Test show().
+     *
+     * @covers ::show
+     * @test
+     */
+    public function testShowImplodesIncludeParametersCorrectly()
+    {
+        // Test values
+        $parameters = array('include' => array('parameter1', 'parameter2'));
+        $getResponse = array('API Response');
+
+        // Create the used mock objects
+        $client = $this->getMockBuilder('Redmine\Client')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $client->expects($this->once())
+            ->method('get')
+            ->with(
+                $this->logicalAnd(
+                    $this->stringStartsWith('/issues/5.json'),
+                    $this->stringContains(urlencode('parameter1,parameter2'))
+                )
+            )
+            ->willReturn($getResponse);
+
+        // Create the object under test
+        $api = new Issue($client);
+
+        // Perform the tests
+        $this->assertSame($getResponse, $api->show(5, $parameters));
+    }
+
+    /**
+     * Test remove().
      *
      * @covers ::delete
      * @covers ::remove
      * @test
-     *
-     * @return void
      */
     public function testRemoveCallsDelete()
     {
@@ -197,13 +219,11 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test attach()
+     * Test attach().
      *
      * @covers ::attach
      * @covers ::put
      * @test
-     *
-     * @return void
      */
     public function testAttachCallsPut()
     {
@@ -211,15 +231,15 @@ class IssueTest extends \PHPUnit_Framework_TestCase
         $response = 'API Response';
         $attachment = array(
             'token' => 'sample-test-token',
-            'filename' => 'test.txt'
+            'filename' => 'test.txt',
         );
         $requestData = array(
             'issue' => array(
                 'id' => 5,
                 'uploads' => array(
-                    'upload' => $attachment
-                )
-            )
+                    'upload' => $attachment,
+                ),
+            ),
         );
 
         // Create the used mock objects
@@ -248,12 +268,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test addWatcher()
+     * Test addWatcher().
      *
      * @covers ::addWatcher
      * @test
-     *
-     * @return void
      */
     public function testAddWatcherCallsPost()
     {
@@ -280,12 +298,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test removeWatcher()
+     * Test removeWatcher().
      *
      * @covers ::removeWatcher
      * @test
-     *
-     * @return void
      */
     public function testRemoveWatcherCallsPost()
     {
@@ -311,13 +327,11 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @covers ::post
      * @test
-     *
-     * @return void
      */
     public function testCreateCallsPost()
     {
@@ -333,7 +347,7 @@ class IssueTest extends \PHPUnit_Framework_TestCase
             ->method('post')
             ->with(
                 '/issues.xml',
-                '<?xml version="1.0"?>' . "\n" . '<issue/>' . "\n"
+                '<?xml version="1.0"?>'."\n".'<issue/>'."\n"
             )
             ->willReturn($getResponse);
 
@@ -345,13 +359,11 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test cleanParams()
+     * Test cleanParams().
      *
      * @covers ::create
      * @covers ::cleanParams
      * @test
-     *
-     * @return void
      */
     public function testCreateCleansParameters()
     {
@@ -400,8 +412,8 @@ class IssueTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/issues.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<issue>'),
-                    $this->stringEndsWith('</issue>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<issue>'),
+                    $this->stringEndsWith('</issue>'."\n"),
                     $this->stringContains('<project_id>cleanedValue</project_id>'),
                     $this->stringContains('<category_id>cleanedValue</category_id>'),
                     $this->stringContains('<status_id>cleanedValue</status_id>'),
@@ -420,13 +432,65 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update()
+     * Test create() and buildXML().
+     *
+     * @covers ::create
+     * @covers ::buildXML
+     * @covers ::attachCustomFieldXML
+     * @test
+     */
+    public function testCreateBuildsXmlForCustomFields()
+    {
+        // Test values
+        $getResponse = 'API Response';
+        $parameters = array(
+            'custom_fields' => array(
+                array(
+                    'id' => 123,
+                    'name' => 'cf_name',
+                    'field_format' => 'string',
+                    'value' => array(1, 2, 3),
+                )
+            )
+        );
+
+        // Create the used mock objects
+        $client = $this->getMockBuilder('Redmine\Client')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $client->expects($this->once())
+            ->method('post')
+            ->with(
+                '/issues.xml',
+                $this->logicalAnd(
+                    $this->stringStartsWith('<?xml version="1.0"?>'),
+                    $this->stringContains('<issue>'),
+                    $this->stringContains('<custom_fields type="array">'),
+                    $this->stringContains('<custom_field name="cf_name" field_format="string" id="123" multiple="true">'),
+                    $this->stringContains('<value>1</value>'),
+                    $this->stringContains('<value>2</value>'),
+                    $this->stringContains('<value>3</value>'),
+                    $this->stringContains('</custom_field>'),
+                    $this->stringContains('</custom_fields>'),
+                    $this->stringEndsWith('</issue>'."\n")
+                )
+            )
+            ->willReturn($getResponse);
+
+        // Create the object under test
+        $api = new Issue($client);
+
+        // Perform the tests
+        $this->assertSame($getResponse, $api->create($parameters));
+    }
+
+    /**
+     * Test update().
      *
      * @covers ::update
      * @covers ::put
      * @test
-     *
-     * @return void
      */
     public function testUpdateCallsPut()
     {
@@ -442,7 +506,7 @@ class IssueTest extends \PHPUnit_Framework_TestCase
             ->method('put')
             ->with(
                 '/issues/5.xml',
-                '<?xml version="1.0"?>' . "\n" . '<issue><id>5</id></issue>' . "\n"
+                '<?xml version="1.0"?>'."\n".'<issue><id>5</id></issue>'."\n"
             )
             ->willReturn($getResponse);
 
@@ -454,13 +518,11 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update()
+     * Test update().
      *
      * @covers ::update
      * @covers ::cleanParams
      * @test
-     *
-     * @return void
      */
     public function testUpdateCleansParameters()
     {
@@ -509,8 +571,8 @@ class IssueTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/issues/5.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<issue>'),
-                    $this->stringEndsWith('</issue>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<issue>'),
+                    $this->stringEndsWith('</issue>'."\n"),
                     $this->stringContains('<id>5</id>'),
                     $this->stringContains('<project_id>cleanedValue</project_id>'),
                     $this->stringContains('<category_id>cleanedValue</category_id>'),
@@ -530,12 +592,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test setIssueStatus()
+     * Test setIssueStatus().
      *
      * @covers ::setIssueStatus
      * @test
-     *
-     * @return void
      */
     public function testSetIssueStatus()
     {
@@ -563,8 +623,8 @@ class IssueTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/issues/5.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<issue>'),
-                    $this->stringEndsWith('</issue>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<issue>'),
+                    $this->stringEndsWith('</issue>'."\n"),
                     $this->stringContains('<id>5</id>'),
                     $this->stringContains('<status_id>123</status_id>')
                 )
@@ -579,12 +639,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test addNoteToIssue()
+     * Test addNoteToIssue().
      *
      * @covers ::addNoteToIssue
      * @test
-     *
-     * @return void
      */
     public function testAddNoteToIssue()
     {
@@ -600,8 +658,8 @@ class IssueTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/issues/5.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<issue>'),
-                    $this->stringEndsWith('</issue>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<issue>'),
+                    $this->stringEndsWith('</issue>'."\n"),
                     $this->stringContains('<id>5</id>'),
                     $this->stringContains('<notes>Note content</notes>')
                 )
@@ -616,12 +674,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test buildXML()
+     * Test buildXML().
      *
      * @covers ::buildXML
      * @test
-     *
-     * @return void
      */
     public function testBuildXmlWithCustomFields()
     {
@@ -642,8 +698,8 @@ class IssueTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/issues.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<issue>'),
-                    $this->stringEndsWith('</issue>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<issue>'),
+                    $this->stringEndsWith('</issue>'."\n"),
                     $this->stringContains('<custom_fields type="array">'),
                     $this->stringContains('</custom_fields>'),
                     $this->stringContains('<custom_field id="225"><value>One Custom Field</value></custom_field>'),
@@ -659,12 +715,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test buildXML()
+     * Test buildXML().
      *
      * @covers ::buildXML
      * @test
-     *
-     * @return void
      */
     public function testBuildXmlWithWatchers()
     {
@@ -682,8 +736,8 @@ class IssueTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/issues.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<issue>'),
-                    $this->stringEndsWith('</issue>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<issue>'),
+                    $this->stringEndsWith('</issue>'."\n"),
                     $this->stringContains('<watcher_user_ids type="array">'),
                     $this->stringContains('</watcher_user_ids>'),
                     $this->stringContains('<watcher_user_id>5</watcher_user_id>'),
@@ -699,12 +753,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test buildXML()
+     * Test buildXML().
      *
      * @covers ::buildXML
      * @test
-     *
-     * @return void
      */
     public function testBuildXmlWithUploads()
     {
@@ -721,7 +773,7 @@ class IssueTest extends \PHPUnit_Framework_TestCase
                     'token' => 'second-token',
                     'filename' => 'An-Other-File.css',
                     'content_type' => 'text/css',
-                )
+                ),
             ),
         );
 
@@ -734,24 +786,24 @@ class IssueTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/issues.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<issue>'),
-                    $this->stringEndsWith('</issue>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<issue>'),
+                    $this->stringEndsWith('</issue>'."\n"),
                     $this->stringContains('<uploads type="array">'),
                     $this->stringContains('</uploads>'),
                     $this->stringContains(
                         '<upload>'
-                        . '<token>first-token</token>'
-                        . '<filename>SomeRandomFile.txt</filename>'
-                        . '<description>Simple description</description>'
-                        . '<content_type>text/plain</content_type>'
-                        . '</upload>'
+                        .'<token>first-token</token>'
+                        .'<filename>SomeRandomFile.txt</filename>'
+                        .'<description>Simple description</description>'
+                        .'<content_type>text/plain</content_type>'
+                        .'</upload>'
                     ),
                     $this->stringContains(
                         '<upload>'
-                        . '<token>second-token</token>'
-                        . '<filename>An-Other-File.css</filename>'
-                        . '<content_type>text/css</content_type>'
-                        . '</upload>'
+                        .'<token>second-token</token>'
+                        .'<filename>An-Other-File.css</filename>'
+                        .'<content_type>text/css</content_type>'
+                        .'</upload>'
                     )
                 )
             );
@@ -764,12 +816,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test buildXML()
+     * Test buildXML().
      *
      * @covers ::buildXML
      * @test
-     *
-     * @return void
      */
     public function testBuildXmlWithWatcherAndUploadAndCustomFieldAndStandard()
     {
@@ -799,23 +849,23 @@ class IssueTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/issues.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<issue>'),
-                    $this->stringEndsWith('</issue>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<issue>'),
+                    $this->stringEndsWith('</issue>'."\n"),
                     $this->stringContains('<watcher_user_ids type="array">'),
                     $this->stringContains('</watcher_user_ids>'),
                     $this->stringContains('<watcher_user_id>5</watcher_user_id>'),
                     $this->stringContains(
                         '<upload>'
-                        . '<token>first-token</token>'
-                        . '<filename>SomeRandomFile.txt</filename>'
-                        . '<description>Simple description</description>'
-                        . '<content_type>text/plain</content_type>'
-                        . '</upload>'
+                        .'<token>first-token</token>'
+                        .'<filename>SomeRandomFile.txt</filename>'
+                        .'<description>Simple description</description>'
+                        .'<content_type>text/plain</content_type>'
+                        .'</upload>'
                     ),
                     $this->stringContains(
                         '<custom_field id="25">'
-                        . '<value>Second Custom Field</value>'
-                        . '</custom_field>'
+                        .'<value>Second Custom Field</value>'
+                        .'</custom_field>'
                     ),
                     $this->stringContains('<subject>Issue subject</subject>')
                 )

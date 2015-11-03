@@ -6,17 +6,16 @@ use Redmine\Api\IssueCategory;
 
 /**
  * @coversDefaultClass Redmine\Api\IssueCategory
+ *
  * @author     Malte Gerth <mail@malte-gerth.de>
  */
 class IssueCategoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithProject()
     {
@@ -43,12 +42,10 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithParametersAndProject()
     {
@@ -79,12 +76,10 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingReturnsNameIdArray()
     {
@@ -92,7 +87,7 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'issue_categories' => array(
                 array('id' => 1, 'name' => 'IssueCategory 1'),
-                array('id' => 5, 'name' => 'IssueCategory 5')
+                array('id' => 5, 'name' => 'IssueCategory 5'),
             ),
         );
         $expectedReturn = array(
@@ -119,12 +114,10 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingCallsGetOnlyTheFirstTime()
     {
@@ -132,7 +125,7 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'issue_categories' => array(
                 array('id' => 1, 'name' => 'IssueCategory 1'),
-                array('id' => 5, 'name' => 'IssueCategory 5')
+                array('id' => 5, 'name' => 'IssueCategory 5'),
             ),
         );
         $expectedReturn = array(
@@ -160,12 +153,10 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingCallsGetEveryTimeWithForceUpdate()
     {
@@ -173,7 +164,7 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'issue_categories' => array(
                 array('id' => 1, 'name' => 'IssueCategory 1'),
-                array('id' => 5, 'name' => 'IssueCategory 5')
+                array('id' => 5, 'name' => 'IssueCategory 5'),
             ),
         );
         $expectedReturn = array(
@@ -201,13 +192,11 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test show()
+     * Test show().
      *
      * @covers ::get
      * @covers ::show
      * @test
-     *
-     * @return void
      */
     public function testShowReturnsClientGetResponse()
     {
@@ -231,13 +220,11 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test remove()
+     * Test remove().
      *
      * @covers ::delete
      * @covers ::remove
      * @test
-     *
-     * @return void
      */
     public function testRemoveCallsDelete()
     {
@@ -269,13 +256,11 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test remove()
+     * Test remove().
      *
      * @covers ::delete
      * @covers ::remove
      * @test
-     *
-     * @return void
      */
     public function testRemoveCallsDeleteWithParameters()
     {
@@ -309,19 +294,17 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getIdByName()
+     * Test getIdByName().
      *
      * @covers ::getIdByName
      * @test
-     *
-     * @return void
      */
     public function testGetIdByNameMakesGetRequest()
     {
         // Test values
         $getResponse = array(
             'issue_categories' => array(
-                array('id' => 5, 'name' => 'IssueCategory 5')
+                array('id' => 5, 'name' => 'IssueCategory 5'),
             ),
         );
 
@@ -345,14 +328,12 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::post
      * @covers ::create
      * @expectedException Exception
      * @test
-     *
-     * @return void
      */
     public function testCreateThrowsExceptionIfNameIsMissing()
     {
@@ -375,13 +356,11 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::post
      * @covers ::create
      * @test
-     *
-     * @return void
      */
     public function testCreateCallsPost()
     {
@@ -401,8 +380,8 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/projects/5/issue_categories.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<issue_category>'),
-                    $this->stringEndsWith('</issue_category>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<issue_category>'),
+                    $this->stringEndsWith('</issue_category>'."\n"),
                     $this->stringContains('<name>Test Category</name>'),
                     $this->stringContains('<assigned_to_id>2</assigned_to_id>')
                 )
@@ -417,13 +396,11 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update()
+     * Test update().
      *
      * @covers ::put
      * @covers ::update
      * @test
-     *
-     * @return void
      */
     public function testUpdateCallsPut()
     {
@@ -443,8 +420,8 @@ class IssueCategoryTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/issue_categories/5.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<issue_category>'),
-                    $this->stringEndsWith('</issue_category>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<issue_category>'),
+                    $this->stringEndsWith('</issue_category>'."\n"),
                     $this->stringContains('<name>Test Category</name>'),
                     $this->stringContains('<assigned_to_id>2</assigned_to_id>')
                 )

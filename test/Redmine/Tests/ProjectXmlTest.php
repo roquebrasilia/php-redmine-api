@@ -2,7 +2,7 @@
 
 namespace Redmine\Tests;
 
-use Redmine\TestClient;
+use Redmine\Fixtures\MockClient as TestClient;
 
 class ProjectXmlTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +14,7 @@ class ProjectXmlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-      * @expectedException Exception
+     * @expectedException Exception
      */
     public function testCreateBlank()
     {
@@ -23,14 +23,14 @@ class ProjectXmlTest extends \PHPUnit_Framework_TestCase
         $xml = '<?xml version="1.0"?>
 <project/>';
         $res = $this->client->api('project')->create();
-        $this->assertEquals($this->formatXml($xml), $this->formatXml($res));
+        $this->assertEquals($this->formatXml($xml), $this->formatXml($res['data']));
     }
 
     public function testCreateComplex()
     {
         $res = $this->client->api('project')->create(array(
-            'name'        => 'some name',
-            'identifier'  => 'the_identifier',
+            'name' => 'some name',
+            'identifier' => 'the_identifier',
         ));
 
         $xml = '<?xml version="1.0"?>
@@ -38,16 +38,16 @@ class ProjectXmlTest extends \PHPUnit_Framework_TestCase
     <name>some name</name>
     <identifier>the_identifier</identifier>
 </project>';
-        $this->assertEquals($this->formatXml($xml), $this->formatXml($res));
+        $this->assertEquals($this->formatXml($xml), $this->formatXml($res['data']));
     }
 
     public function testCreateComplexWithTrackerIds()
     {
         $res = $this->client->api('project')->create(array(
-            'name'        => 'some name',
-            'identifier'  => 'the_identifier',
+            'name' => 'some name',
+            'identifier' => 'the_identifier',
             'tracker_ids' => array(
-                1, 2, 3
+                1, 2, 3,
             ),
         ));
 
@@ -61,7 +61,7 @@ class ProjectXmlTest extends \PHPUnit_Framework_TestCase
         <tracker>3</tracker>
     </tracker_ids>
 </project>';
-        $this->assertEquals($this->formatXml($xml), $this->formatXml($res));
+        $this->assertEquals($this->formatXml($xml), $this->formatXml($res['data']));
     }
 
     public function testUpdate()
@@ -75,7 +75,7 @@ class ProjectXmlTest extends \PHPUnit_Framework_TestCase
     <id>1</id>
     <name>different name</name>
 </project>';
-        $this->assertEquals($this->formatXml($xml), $this->formatXml($res));
+        $this->assertEquals($this->formatXml($xml), $this->formatXml($res['data']));
     }
 
     private function formatXml($xml)

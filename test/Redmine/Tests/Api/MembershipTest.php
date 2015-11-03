@@ -6,17 +6,16 @@ use Redmine\Api\Membership;
 
 /**
  * @coversDefaultClass Redmine\Api\Membership
+ *
  * @author     Malte Gerth <mail@malte-gerth.de>
  */
 class MembershipTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithProject()
     {
@@ -42,12 +41,10 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithParametersAndProject()
     {
@@ -77,13 +74,11 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test remove()
+     * Test remove().
      *
      * @covers ::delete
      * @covers ::remove
      * @test
-     *
-     * @return void
      */
     public function testRemoveCallsDelete()
     {
@@ -115,13 +110,11 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @expectedException Exception
      * @test
-     *
-     * @return void
      */
     public function testCreateThrowsExceptionWithEmptyParameters()
     {
@@ -141,13 +134,11 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @expectedException Exception
      * @test
-     *
-     * @return void
      */
     public function testCreateThrowsExceptionIfRoleIdsAreMissingInParameters()
     {
@@ -167,13 +158,11 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @covers ::post
      * @test
-     *
-     * @return void
      */
     public function testCreateCallsPost()
     {
@@ -182,7 +171,7 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
         $parameters = array(
             'user_ids' => 1,
             'user_id' => 1,
-            'role_ids' => 1
+            'role_ids' => 1,
         );
 
         // Create the used mock objects
@@ -197,8 +186,8 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
                     $this->stringEndsWith('.xml')
                 ),
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<membership>'),
-                    $this->stringEndsWith('</membership>' . "\n")
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<membership>'),
+                    $this->stringEndsWith('</membership>'."\n")
                 )
             )
             ->willReturn($getResponse);
@@ -211,13 +200,11 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @covers ::buildXML
      * @test
-     *
-     * @return void
      */
     public function testCreateBuildsXml()
     {
@@ -241,8 +228,8 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
                     $this->stringEndsWith('.xml')
                 ),
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<membership>'),
-                    $this->stringEndsWith('</membership>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<membership>'),
+                    $this->stringEndsWith('</membership>'."\n"),
                     $this->stringContains('<user_ids type="array">'),
                     $this->stringContains('<user_id>1</user_id>'),
                     $this->stringContains('<user_id>2</user_id>'),
@@ -264,13 +251,11 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update()
+     * Test update().
      *
      * @covers ::update
      * @expectedException Exception
      * @test
-     *
-     * @return void
      */
     public function testUpdateThrowsExceptionIfRoleIdsAreMissingInParameters()
     {
@@ -290,20 +275,18 @@ class MembershipTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update()
+     * Test update().
      *
      * @covers ::put
      * @covers ::update
      * @test
-     *
-     * @return void
      */
     public function testUpdateCallsPut()
     {
         // Test values
         $getResponse = 'API Response';
         $parameters = array(
-            'role_ids' => 1
+            'role_ids' => 1,
         );
 
         // Create the used mock objects

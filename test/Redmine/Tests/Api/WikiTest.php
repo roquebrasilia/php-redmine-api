@@ -6,17 +6,16 @@ use Redmine\Api\Wiki;
 
 /**
  * @coversDefaultClass Redmine\Api\Wiki
+ *
  * @author     Malte Gerth <mail@malte-gerth.de>
  */
 class WikiTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponse()
     {
@@ -40,19 +39,17 @@ class WikiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithParameters()
     {
         // Test values
         $parameters = array(
             'offset' => 10,
-            'limit' => 2
+            'limit' => 2,
         );
         $getResponse = array('API Response');
 
@@ -79,13 +76,11 @@ class WikiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test show()
+     * Test show().
      *
      * @covers ::get
      * @covers ::show
      * @test
-     *
-     * @return void
      */
     public function testShowWithNumericIdsReturnsClientGetResponse()
     {
@@ -109,13 +104,11 @@ class WikiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test show()
+     * Test show().
      *
      * @covers ::get
      * @covers ::show
      * @test
-     *
-     * @return void
      */
     public function testShowWithIdentifierReturnsClientGetResponse()
     {
@@ -139,13 +132,11 @@ class WikiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test show()
+     * Test show().
      *
      * @covers ::get
      * @covers ::show
      * @test
-     *
-     * @return void
      */
     public function testShowWithNumericIdsAndVersionReturnsClientGetResponse()
     {
@@ -169,13 +160,11 @@ class WikiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test show()
+     * Test show().
      *
      * @covers ::get
      * @covers ::show
      * @test
-     *
-     * @return void
      */
     public function testShowWithIdentifierAndVersionReturnsClientGetResponse()
     {
@@ -199,13 +188,11 @@ class WikiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test remove()
+     * Test remove().
      *
      * @covers ::delete
      * @covers ::remove
      * @test
-     *
-     * @return void
      */
     public function testRemoveCallsDelete()
     {
@@ -229,13 +216,11 @@ class WikiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @covers ::post
      * @test
-     *
-     * @return void
      */
     public function testCreateCallsPost()
     {
@@ -250,7 +235,7 @@ class WikiTest extends \PHPUnit_Framework_TestCase
             ->method('put')
             ->with(
                 '/projects/5/wiki/test.xml',
-                '<?xml version="1.0"?>' . "\n" . '<wiki_page/>' . "\n"
+                '<?xml version="1.0"?>'."\n".'<wiki_page/>'."\n"
             )
             ->willReturn($getResponse);
 
@@ -262,22 +247,20 @@ class WikiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @covers ::post
      * @test
-     *
-     * @return void
      */
     public function testCreateWithParametersCallsPost()
     {
         // Test values
         $getResponse = 'API Response';
         $parameters = array(
-            'title'     => 'Test Wikipage',
-            'comments'  => 'Initial Edit',
-            'text'  => 'Some page text',
+            'title' => 'Test Wikipage',
+            'comments' => 'Initial Edit',
+            'text' => 'Some page text',
         );
 
         // Create the used mock objects
@@ -289,8 +272,8 @@ class WikiTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/projects/5/wiki/test.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<wiki_page>'),
-                    $this->stringEndsWith('</wiki_page>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<wiki_page>'),
+                    $this->stringEndsWith('</wiki_page>'."\n"),
                     $this->stringContains('<title>Test Wikipage</title>'),
                     $this->stringContains('<comments>Initial Edit</comments>'),
                     $this->stringContains('<text>Some page text</text>')
@@ -306,13 +289,11 @@ class WikiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update()
+     * Test update().
      *
      * @covers ::put
      * @covers ::update
      * @test
-     *
-     * @return void
      */
     public function testUpdateCallsPut()
     {
@@ -327,7 +308,7 @@ class WikiTest extends \PHPUnit_Framework_TestCase
             ->method('put')
             ->with(
                 '/projects/5/wiki/test.xml',
-                '<?xml version="1.0"?>' . "\n" . '<wiki_page/>' . "\n"
+                '<?xml version="1.0"?>'."\n".'<wiki_page/>'."\n"
             )
             ->willReturn($getResponse);
 
@@ -339,22 +320,20 @@ class WikiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update()
+     * Test update().
      *
      * @covers ::put
      * @covers ::update
      * @test
-     *
-     * @return void
      */
     public function testUpdateWithParametersCallsPut()
     {
         // Test values
         $getResponse = 'API Response';
         $parameters = array(
-            'title'     => 'Test Wikipage',
-            'comments'  => 'Initial Edit',
-            'text'  => 'Some page text',
+            'title' => 'Test Wikipage',
+            'comments' => 'Initial Edit',
+            'text' => 'Some page text',
         );
 
         // Create the used mock objects
@@ -366,8 +345,8 @@ class WikiTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/projects/5/wiki/test.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<wiki_page>'),
-                    $this->stringEndsWith('</wiki_page>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<wiki_page>'),
+                    $this->stringEndsWith('</wiki_page>'."\n"),
                     $this->stringContains('<title>Test Wikipage</title>'),
                     $this->stringContains('<comments>Initial Edit</comments>'),
                     $this->stringContains('<text>Some page text</text>')

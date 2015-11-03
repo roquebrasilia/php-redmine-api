@@ -6,17 +6,16 @@ use Redmine\Api\TimeEntry;
 
 /**
  * @coversDefaultClass Redmine\Api\TimeEntry
+ *
  * @author     Malte Gerth <mail@malte-gerth.de>
  */
 class TimeEntryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponse()
     {
@@ -40,12 +39,10 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithParameters()
     {
@@ -53,7 +50,7 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
         $parameters = array(
             'project_id' => 5,
             'user_id' => 10,
-            'limit' => 2
+            'limit' => 2,
         );
         $getResponse = array('API Response');
 
@@ -81,13 +78,11 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test show()
+     * Test show().
      *
      * @covers ::get
      * @covers ::show
      * @test
-     *
-     * @return void
      */
     public function testShowReturnsClientGetResponse()
     {
@@ -111,13 +106,11 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test remove()
+     * Test remove().
      *
      * @covers ::delete
      * @covers ::remove
      * @test
-     *
-     * @return void
      */
     public function testRemoveCallsDelete()
     {
@@ -141,13 +134,11 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @expectedException Exception
      * @test
-     *
-     * @return void
      */
     public function testCreateThrowsExceptionWithEmptyParameters()
     {
@@ -167,20 +158,18 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @expectedException Exception
      * @test
-     *
-     * @return void
      */
     public function testCreateThrowsExceptionIfIssueIdAndProjectIdAreMissingInParameters()
     {
         // Test values
         $getResponse = 'API Response';
         $parameters = array(
-            'hours' => '5.25'
+            'hours' => '5.25',
         );
 
         // Create the used mock objects
@@ -196,13 +185,11 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @expectedException Exception
      * @test
-     *
-     * @return void
      */
     public function testCreateThrowsExceptionIfHoursAreMissingInParameters()
     {
@@ -226,13 +213,11 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @covers ::post
      * @test
-     *
-     * @return void
      */
     public function testCreateCallsPost()
     {
@@ -241,7 +226,19 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
         $parameters = array(
             'issue_id' => '15',
             'project_id' => '25',
-            'hours' => '5.25'
+            'hours' => '5.25',
+            'custom_fields' => array(
+                 array(
+                    'id' => 1,
+                    'name' => 'Affected version',
+                    'value' => '1.0.1',
+                ),
+                 array(
+                    'id' => 2,
+                    'name' => 'Resolution',
+                    'value' => 'Fixed',
+                ),
+            ),
         );
 
         // Create the used mock objects
@@ -253,11 +250,12 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/time_entries.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<time_entry>'),
-                    $this->stringEndsWith('</time_entry>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<time_entry>'),
+                    $this->stringEndsWith('</time_entry>'."\n"),
                     $this->stringContains('<issue_id>15</issue_id>'),
                     $this->stringContains('<project_id>25</project_id>'),
-                    $this->stringContains('<hours>5.25</hours>')
+                    $this->stringContains('<hours>5.25</hours>'),
+                    $this->stringContains('<custom_fields type="array"><custom_field name="Affected version" id="1"><value>1.0.1</value></custom_field><custom_field name="Resolution" id="2"><value>Fixed</value></custom_field></custom_fields>')
                 )
             )
             ->willReturn($getResponse);
@@ -270,20 +268,30 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update()
+     * Test update().
      *
      * @covers ::put
      * @covers ::update
      * @test
-     *
-     * @return void
      */
     public function testUpdateCallsPut()
     {
         // Test values
         $getResponse = 'API Response';
         $parameters = array(
-            'hours' => '10.25'
+            'hours' => '10.25',
+            'custom_fields' => array(
+                 array(
+                    'id' => 1,
+                    'name' => 'Affected version',
+                    'value' => '1.0.1',
+                ),
+                 array(
+                    'id' => 2,
+                    'name' => 'Resolution',
+                    'value' => 'Fixed',
+                ),
+            ),
         );
 
         // Create the used mock objects
@@ -295,9 +303,10 @@ class TimeEntryTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/time_entries/5.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<time_entry>'),
-                    $this->stringEndsWith('</time_entry>' . "\n"),
-                    $this->stringContains('<hours>10.25</hours>')
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<time_entry>'),
+                    $this->stringEndsWith('</time_entry>'."\n"),
+                    $this->stringContains('<hours>10.25</hours>'),
+                    $this->stringContains('<custom_fields type="array"><custom_field name="Affected version" id="1"><value>1.0.1</value></custom_field><custom_field name="Resolution" id="2"><value>Fixed</value></custom_field></custom_fields>')
                 )
             )
             ->willReturn($getResponse);

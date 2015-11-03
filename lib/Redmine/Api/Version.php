@@ -3,9 +3,10 @@
 namespace Redmine\Api;
 
 /**
- * Listing versions, creating, editing
+ * Listing versions, creating, editing.
  *
  * @link   http://www.redmine.org/projects/redmine/wiki/Rest_Versions
+ *
  * @author Kevin Saliou <kevin at saliou dot name>
  */
 class Version extends AbstractApi
@@ -13,12 +14,14 @@ class Version extends AbstractApi
     private $versions = array();
 
     /**
-     * List versions
+     * List versions.
+     *
      * @link http://www.redmine.org/projects/redmine/wiki/Rest_Versions#GET
      *
-     * @param  string|int $project project id or literal identifier
-     * @param  array      $params  optional parameters to be passed to the api (offset, limit, ...)
-     * @return array      list of versions found
+     * @param string|int $project project id or literal identifier
+     * @param array      $params  optional parameters to be passed to the api (offset, limit, ...)
+     *
+     * @return array list of versions found
      */
     public function all($project, array $params = array())
     {
@@ -30,34 +33,38 @@ class Version extends AbstractApi
     /**
      * Returns an array of name/id pairs (or id/name if not $reverse) of issue versions for $project.
      *
-     * @param  string|int $project     project id or literal identifier
-     * @param  boolean    $forceUpdate to force the update of the projects var
-     * @param  boolean    $reverse     to return an array indexed by name rather than id
-     * @return array      list of projects (id => project name)
+     * @param string|int $project     project id or literal identifier
+     * @param bool       $forceUpdate to force the update of the projects var
+     * @param bool       $reverse     to return an array indexed by name rather than id
+     * @param array      $params      optional parameters to be passed to the api (offset, limit, ...)
+     *
+     * @return array list of projects (id => project name)
      */
-    public function listing($project, $forceUpdate = false, $reverse = true)
+    public function listing($project, $forceUpdate = false, $reverse = true, array $params = array())
     {
         if (true === $forceUpdate || empty($this->versions)) {
-            $this->all($project);
+            $this->all($project, $params);
         }
         $ret = array();
         foreach ($this->versions['versions'] as $e) {
-            $ret[(int) $e['id']] =  $e['name'];
+            $ret[(int) $e['id']] = $e['name'];
         }
 
         return $reverse ? array_flip($ret) : $ret;
     }
 
     /**
-     * Get an issue version id given its name and related project
+     * Get an issue version id given its name and related project.
      *
-     * @param  string|int $project project id or literal identifier
-     * @param  string     $name
+     * @param string|int $project project id or literal identifier
+     * @param string     $name
+     * @param array      $params  optional parameters to be passed to the api (offset, limit, ...)
+     *
      * @return int|false
      */
-    public function getIdByName($project, $name)
+    public function getIdByName($project, $name, array $params = array())
     {
-        $arr = $this->listing($project);
+        $arr = $this->listing($project, false, true, $params);
         if (!isset($arr[$name])) {
             return false;
         }
@@ -66,11 +73,13 @@ class Version extends AbstractApi
     }
 
     /**
-     * Get extended information about an issue version
+     * Get extended information about an issue version.
+     *
      * @link http://www.redmine.org/projects/redmine/wiki/Rest_Versions#GET-2
      *
-     * @param  string $id the issue category id
-     * @return array  information about the category
+     * @param string $id the issue category id
+     *
+     * @return array information about the category
      */
     public function show($id)
     {
@@ -78,24 +87,27 @@ class Version extends AbstractApi
     }
 
     /**
-     * Create a new version for $project given an array of $params
+     * Create a new version for $project given an array of $params.
+     *
      * @link http://www.redmine.org/projects/redmine/wiki/Rest_Versions#POST
      *
-     * @param  string|int       $project project id or literal identifier
-     * @param  array            $params  the new issue category data
+     * @param string|int $project project id or literal identifier
+     * @param array      $params  the new issue category data
+     *
      * @return SimpleXMLElement
      */
     public function create($project, array $params = array())
     {
         $defaults = array(
-            'name'        => null,
+            'name' => null,
             'description' => null,
-            'status'      => null,
-            'sharing'     => null,
-            'due_date'    => null,
+            'status' => null,
+            'sharing' => null,
+            'due_date' => null,
         );
-        $params = array_filter(array_merge($defaults, $params));
-        if(
+        $params = $this->sanitizeParams($defaults, $params);
+
+        if (
             !isset($params['name'])
         ) {
             throw new \Exception('Missing mandatory parameters');
@@ -112,23 +124,25 @@ class Version extends AbstractApi
     }
 
     /**
-     * Update issue category's information
+     * Update issue category's information.
+     *
      * @link http://www.redmine.org/projects/redmine/wiki/Rest_Versions#PUT
      *
-     * @param  string           $id     the issue category id
-     * @param  array            $params
+     * @param string $id     the issue category id
+     * @param array  $params
+     *
      * @return SimpleXMLElement
      */
     public function update($id, array $params)
     {
         $defaults = array(
-            'name'        => null,
+            'name' => null,
             'description' => null,
-            'status'      => null,
-            'sharing'     => null,
-            'due_date'    => null,
+            'status' => null,
+            'sharing' => null,
+            'due_date' => null,
         );
-        $params = array_filter(array_merge($defaults, $params));
+        $params = $this->sanitizeParams($defaults, $params);
         $this->validateStatus($params);
         $this->validateSharing($params);
 
@@ -145,32 +159,34 @@ class Version extends AbstractApi
         $arrStatus = array(
             'open',
             'locked',
-            'closed'
+            'closed',
         );
         if (isset($params['status']) && !in_array($params['status'], $arrStatus)) {
-            throw new \Exception('Possible values for status : '.join(', ', $arrStatus));
+            throw new \Exception('Possible values for status : '.implode(', ', $arrStatus));
         }
     }
 
     private function validateSharing(array $params = array())
     {
         $arrSharing = array(
-            'none'        => 'Not shared',
+            'none' => 'Not shared',
             'descendants' => 'With subprojects',
-            'hierarchy'   => 'With project hierarchy',
-            'tree'        => 'With project tree',
-            'system'      => 'With all projects',
+            'hierarchy' => 'With project hierarchy',
+            'tree' => 'With project tree',
+            'system' => 'With all projects',
         );
         if (isset($params['sharing']) && !isset($arrSharing[ $params['sharing'] ])) {
-            throw new \Exception('Possible values for sharing : '.join(', ', array_keys($arrSharing)));
+            throw new \Exception('Possible values for sharing : '.implode(', ', array_keys($arrSharing)));
         }
     }
 
     /**
      * Delete a version.
+     *
      * @link http://www.redmine.org/projects/redmine/wiki/Rest_Versions#DELETE
      *
-     * @param  int    $id id of the version
+     * @param int $id id of the version
+     *
      * @return string
      */
     public function remove($id)

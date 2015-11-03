@@ -6,17 +6,16 @@ use Redmine\Api\Project;
 
 /**
  * @coversDefaultClass Redmine\Api\Project
+ *
  * @author     Malte Gerth <mail@malte-gerth.de>
  */
 class ProjectTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponse()
     {
@@ -40,12 +39,10 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithParameters()
     {
@@ -75,13 +72,11 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test show()
+     * Test show().
      *
      * @covers ::get
      * @covers ::show
      * @test
-     *
-     * @return void
      */
     public function testShowReturnsClientGetResponse()
     {
@@ -96,7 +91,7 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with(
                 '/projects/5.json?include=trackers,issue_categories,'
-                . 'attachments,relations'
+                .'attachments,relations'
             )
             ->willReturn($getResponse);
 
@@ -108,13 +103,11 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test remove()
+     * Test remove().
      *
      * @covers ::delete
      * @covers ::remove
      * @test
-     *
-     * @return void
      */
     public function testRemoveCallsDelete()
     {
@@ -138,12 +131,10 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingReturnsNameIdArray()
     {
@@ -151,7 +142,7 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'projects' => array(
                 array('id' => 1, 'name' => 'Project 1'),
-                array('id' => 5, 'name' => 'Project 5')
+                array('id' => 5, 'name' => 'Project 5'),
             ),
         );
         $expectedReturn = array(
@@ -178,12 +169,10 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingCallsGetOnlyTheFirstTime()
     {
@@ -191,7 +180,7 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'projects' => array(
                 array('id' => 1, 'name' => 'Project 1'),
-                array('id' => 5, 'name' => 'Project 5')
+                array('id' => 5, 'name' => 'Project 5'),
             ),
         );
         $expectedReturn = array(
@@ -219,12 +208,10 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingCallsGetEveryTimeWithForceUpdate()
     {
@@ -232,7 +219,7 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'projects' => array(
                 array('id' => 1, 'name' => 'Project 1'),
-                array('id' => 5, 'name' => 'Project 5')
+                array('id' => 5, 'name' => 'Project 5'),
             ),
         );
         $expectedReturn = array(
@@ -260,19 +247,17 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getIdByName()
+     * Test getIdByName().
      *
      * @covers ::getIdByName
      * @test
-     *
-     * @return void
      */
     public function testGetIdByNameMakesGetRequest()
     {
         // Test values
         $getResponse = array(
             'projects' => array(
-                array('id' => 5, 'name' => 'Project 5')
+                array('id' => 5, 'name' => 'Project 5'),
             ),
         );
 
@@ -296,13 +281,11 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @expectedException Exception
      * @test
-     *
-     * @return void
      */
     public function testCreateThrowsExceptionWithEmptyParameters()
     {
@@ -322,20 +305,18 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @expectedException Exception
      * @test
-     *
-     * @return void
      */
     public function testCreateThrowsExceptionIfIdentifierIsMissingInParameters()
     {
         // Test values
         $getResponse = 'API Response';
         $parameters = array(
-            'name' => 'Test Project'
+            'name' => 'Test Project',
         );
 
         // Create the used mock objects
@@ -351,20 +332,18 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @expectedException Exception
      * @test
-     *
-     * @return void
      */
     public function testCreateThrowsExceptionIfNameIsMissingInParameters()
     {
         // Test values
         $getResponse = 'API Response';
         $parameters = array(
-            'identifier' => 'test-project'
+            'identifier' => 'test-project',
         );
 
         // Create the used mock objects
@@ -380,13 +359,11 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @covers ::post
      * @test
-     *
-     * @return void
      */
     public function testCreateCallsPost()
     {
@@ -394,7 +371,7 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
         $getResponse = 'API Response';
         $parameters = array(
             'identifier' => 'test-project',
-            'name' => 'Test Project'
+            'name' => 'Test Project',
         );
 
         // Create the used mock objects
@@ -406,8 +383,8 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/projects.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<project>'),
-                    $this->stringEndsWith('</project>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<project>'),
+                    $this->stringEndsWith('</project>'."\n"),
                     $this->stringContains('<identifier>test-project</identifier>'),
                     $this->stringContains('<name>Test Project</name>')
                 )
@@ -422,13 +399,11 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create()
+     * Test create().
      *
      * @covers ::create
      * @covers ::post
      * @test
-     *
-     * @return void
      */
     public function testCreateCallsPostWithTrackers()
     {
@@ -437,7 +412,7 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
         $parameters = array(
             'identifier' => 'test-project',
             'name' => 'Test Project',
-            'tracker_ids' => array(10, 5)
+            'tracker_ids' => array(10, 5),
         );
 
         // Create the used mock objects
@@ -449,8 +424,8 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
             ->with(
                 '/projects.xml',
                 $this->logicalAnd(
-                    $this->stringStartsWith('<?xml version="1.0"?>' . "\n" . '<project>'),
-                    $this->stringEndsWith('</project>' . "\n"),
+                    $this->stringStartsWith('<?xml version="1.0"?>'."\n".'<project>'),
+                    $this->stringEndsWith('</project>'."\n"),
                     $this->stringContains('<tracker_ids type="array">'),
                     $this->stringContains('<tracker>10</tracker>'),
                     $this->stringContains('<tracker>5</tracker>'),
@@ -467,20 +442,18 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update()
+     * Test update().
      *
      * @covers ::put
      * @covers ::update
      * @test
-     *
-     * @return void
      */
     public function testUpdateCallsPut()
     {
         // Test values
         $getResponse = 'API Response';
         $parameters = array(
-            'name' => 'Test Project'
+            'name' => 'Test Project',
         );
 
         // Create the used mock objects

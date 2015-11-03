@@ -2,7 +2,7 @@
 
 namespace Redmine\Tests;
 
-use Redmine\TestClient;
+use Redmine\Fixtures\MockClient as TestClient;
 
 class WikiXmlTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,9 +16,9 @@ class WikiXmlTest extends \PHPUnit_Framework_TestCase
     public function testCreateComplex()
     {
         $res = $this->client->api('wiki')->create('testProject', 'about', array(
-            'text'     => 'asdf',
+            'text' => 'asdf',
             'comments' => 'asdf',
-            'version'  => 'asdf',
+            'version' => 'asdf',
         ));
 
         $xml = '<?xml version="1.0"?>
@@ -27,15 +27,15 @@ class WikiXmlTest extends \PHPUnit_Framework_TestCase
     <comments>asdf</comments>
     <version>asdf</version>
 </wiki_page>';
-        $this->assertEquals($this->formatXml($xml), $this->formatXml($res));
+        $this->assertEquals($this->formatXml($xml), $this->formatXml($res['data']));
     }
 
     public function testUpdate()
     {
         $res = $this->client->api('wiki')->update('testProject', 'about', array(
-            'text'     => 'asdf',
+            'text' => 'asdf',
             'comments' => 'asdf',
-            'version'  => 'asdf',
+            'version' => 'asdf',
         ));
 
         $xml = '<?xml version="1.0"?>
@@ -44,7 +44,7 @@ class WikiXmlTest extends \PHPUnit_Framework_TestCase
     <comments>asdf</comments>
     <version>asdf</version>
 </wiki_page>';
-        $this->assertEquals($this->formatXml($xml), $this->formatXml($res));
+        $this->assertEquals($this->formatXml($xml), $this->formatXml($res['data']));
     }
 
     private function formatXml($xml)

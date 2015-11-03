@@ -6,17 +6,16 @@ use Redmine\Api\Tracker;
 
 /**
  * @coversDefaultClass Redmine\Api\Tracker
+ *
  * @author     Malte Gerth <mail@malte-gerth.de>
  */
 class TrackerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponse()
     {
@@ -42,12 +41,10 @@ class TrackerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithParametersAndProject()
     {
@@ -77,12 +74,10 @@ class TrackerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingReturnsNameIdArray()
     {
@@ -90,7 +85,7 @@ class TrackerTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'trackers' => array(
                 array('id' => 1, 'name' => 'Tracker 1'),
-                array('id' => 5, 'name' => 'Tracker 5')
+                array('id' => 5, 'name' => 'Tracker 5'),
             ),
         );
         $expectedReturn = array(
@@ -117,12 +112,10 @@ class TrackerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingCallsGetOnlyTheFirstTime()
     {
@@ -130,7 +123,7 @@ class TrackerTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'trackers' => array(
                 array('id' => 1, 'name' => 'Tracker 1'),
-                array('id' => 5, 'name' => 'Tracker 5')
+                array('id' => 5, 'name' => 'Tracker 5'),
             ),
         );
         $expectedReturn = array(
@@ -158,12 +151,10 @@ class TrackerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingCallsGetEveryTimeWithForceUpdate()
     {
@@ -171,7 +162,7 @@ class TrackerTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'trackers' => array(
                 array('id' => 1, 'name' => 'Tracker 1'),
-                array('id' => 5, 'name' => 'Tracker 5')
+                array('id' => 5, 'name' => 'Tracker 5'),
             ),
         );
         $expectedReturn = array(
@@ -199,19 +190,17 @@ class TrackerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getIdByName()
+     * Test getIdByName().
      *
      * @covers ::getIdByName
      * @test
-     *
-     * @return void
      */
     public function testGetIdByNameMakesGetRequest()
     {
         // Test values
         $getResponse = array(
             'trackers' => array(
-                array('id' => 5, 'name' => 'Tracker 5')
+                array('id' => 5, 'name' => 'Tracker 5'),
             ),
         );
 

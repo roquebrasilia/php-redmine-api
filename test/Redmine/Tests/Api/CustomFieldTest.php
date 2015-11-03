@@ -6,20 +6,19 @@ use Redmine\Api\CustomField;
 
 /**
  * @coversDefaultClass Redmine\Api\CustomField
+ *
  * @author     Malte Gerth <mail@malte-gerth.de>
  */
 class CustomFieldTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @covers ::get
      * @covers ::retrieveAll
      * @covers ::isNotNull
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponse()
     {
@@ -45,15 +44,13 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @covers ::get
      * @covers ::retrieveAll
      * @covers ::isNotNull
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithParameters()
     {
@@ -80,15 +77,13 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @covers ::get
      * @covers ::retrieveAll
      * @covers ::isNotNull
      * @test
-     *
-     * @return void
      */
     public function testAllReturnsClientGetResponseWithHighLimit()
     {
@@ -96,7 +91,7 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
         $allParameters = array('limit' => 250);
         $returnDataSet = array(
             'limit' => '100',
-            'items' => array()
+            'items' => array(),
         );
 
         // Create the used mock objects
@@ -121,15 +116,13 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test all()
+     * Test all().
      *
      * @covers ::all
      * @covers ::get
      * @covers ::retrieveAll
      * @covers ::isNotNull
      * @test
-     *
-     * @return void
      */
     public function testAllCallsEndpointUntilOffsetIsHigherThanTotalCount()
     {
@@ -139,7 +132,7 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
             'limit' => '100',
             'offset' => '10',
             'total_count' => '5',
-            'items' => array()
+            'items' => array(),
         );
 
         // Create the used mock objects
@@ -164,12 +157,10 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingReturnsNameIdArray()
     {
@@ -177,7 +168,7 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'custom_fields' => array(
                 array('id' => 1, 'name' => 'CustomField 1'),
-                array('id' => 5, 'name' => 'CustomField 5')
+                array('id' => 5, 'name' => 'CustomField 5'),
             ),
         );
         $expectedReturn = array(
@@ -204,12 +195,10 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingCallsGetOnlyTheFirstTime()
     {
@@ -217,7 +206,7 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'custom_fields' => array(
                 array('id' => 1, 'name' => 'CustomField 1'),
-                array('id' => 5, 'name' => 'CustomField 5')
+                array('id' => 5, 'name' => 'CustomField 5'),
             ),
         );
         $expectedReturn = array(
@@ -245,12 +234,10 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test listing()
+     * Test listing().
      *
      * @covers ::listing
      * @test
-     *
-     * @return void
      */
     public function testListingCallsGetEveryTimeWithForceUpdate()
     {
@@ -258,7 +245,7 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
         $getResponse = array(
             'custom_fields' => array(
                 array('id' => 1, 'name' => 'CustomField 1'),
-                array('id' => 5, 'name' => 'CustomField 5')
+                array('id' => 5, 'name' => 'CustomField 5'),
             ),
         );
         $expectedReturn = array(
@@ -286,19 +273,17 @@ class CustomFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getIdByName()
+     * Test getIdByName().
      *
      * @covers ::getIdByName
      * @test
-     *
-     * @return void
      */
     public function testGetIdByNameMakesGetRequest()
     {
         // Test values
         $getResponse = array(
             'custom_fields' => array(
-                array('id' => 5, 'name' => 'CustomField 5')
+                array('id' => 5, 'name' => 'CustomField 5'),
             ),
         );
 
